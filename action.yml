@@ -1,0 +1,107 @@
+name: "Sign and Ship Android Capacitor App"
+description: "Reusable GitHub Action to build, sign, and distribute Android Capacitor apps using Fastlane."
+author: "ForkbombEu"
+
+inputs:
+  backend-url:
+    description: "The backend URL for the app."
+    required: true
+  lane:
+    description: "The Fastlane lane to execute."
+    required: true
+
+outputs:
+  result:
+    description: "The result of the deployment process."
+
+secrets:
+  keystore-file:
+    description: "Base64-encoded keystore file."
+    required: true
+  service-account:
+    description: "Base64-encoded Google service account file."
+    required: true
+  keystore-alias:
+    description: "Key alias for the keystore."
+    required: true
+  keystore-key-password:
+    description: "Keystore key password."
+    required: true
+  keystore-password:
+    description: "Keystore password."
+    required: true
+  firebase-app-id:
+    description: "Firebase App ID (optional)."
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node and pnpm
+      uses: dyne/pnpm@main
+      with:
+        submodules: true
+        node-version: '20.11.1'
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: zulu
+        java-version: '17'
+
+    - name: Decode Keystore
+      uses: timheuer/base64-to-file@v1
+      id: keystore
+      with:
+        fileName: keystore.keystore
+        encodedString: ${{ secrets.keystore-file }}
+
+    - name: Checkout Fastfile and Dependencies
+      uses: actions/checkout@v4
+      with:
+        repository: ForkbombEu/build-and-ship-capacitor-apps
+        path: fastlane
+        sparse-checkout: |
+          fastlane/Fastfile
+          fastlane/Pluginfile
+
+    - name: Decode Service Account
+      uses: timheuer/base64-to-file@v1
+      id: service_account
+      with:
+        fileName: service-account.json
+        encodedString: ${{ secrets.service-account }}
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0'
+        bundler-cache: true
+
+    - name: Install Node Dependencies
+      run: pnpm install
+      working-directory: fastlane
+
+    - name: Run Fastlane
+      uses: maierj/fastlane-action@v3.1.0
+      with:
+        lane: ${{ inputs.lane }}
+      env:
+        KEYSTORE_PATH: ${{ steps.keystore.outputs.filePath }}
+        SERVICE_ACCOUNT_PATH: ${{ steps.service_account.outputs.filePath }}
+        KEYSTORE_KEY_ALIAS: ${{ secrets.keystore-alias }}
+        KEYSTORE_KEY_PASSWORD: ${{ secrets.keystore-key-password }}
+        KEYSTORE_STORE_PASSWORD: ${{ secrets.keystore-password }}
+        PUBLIC_BACKEND_URL: ${{ inputs.backend-url }}
+        FIREBASE_APP_ID: ${{ secrets.firebase-app-id }}
+
+
+ - name: Checkout fastfile and dependencies
+      uses: actions/checkout@v4
+      with:
+        repository: ForkbombEu/fastlane
+        path: fastlane
+        sparse-checkout: |
+          fastlane/Fastfile
+          fastlane/Pluginfile
+      
