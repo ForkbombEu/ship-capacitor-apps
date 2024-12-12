@@ -59,7 +59,7 @@ runs:
     - name: Checkout Fastfile and Dependencies
       uses: actions/checkout@v4
       with:
-        repository: ForkbombEu/build-and-ship-capacitor-apps
+        repository: ForkbombEu/ship-capacitor-apps
         path: fastlane
         sparse-checkout: |
           fastlane/Fastfile
