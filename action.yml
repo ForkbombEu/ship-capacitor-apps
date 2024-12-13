@@ -63,9 +63,12 @@ runs:
         sparse-checkout: |
           fastlane/Fastfile
           fastlane/Pluginfile
-    - run: ls -al
-    - run: ls fastlane/ -al
-    - run: tree -L 2
+    - shell: bash
+      run: ls -al
+    - shell: bash
+      run: ls fastlane/ -al
+    - shell: bash
+      run: tree -L 2
 
 
     - name: Decode Service Account
