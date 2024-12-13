@@ -59,7 +59,6 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: ForkbombEu/ship-capacitor-apps
-        path: fastlane
         sparse-checkout: |
           fastlane/Fastfile
           fastlane/Pluginfile
