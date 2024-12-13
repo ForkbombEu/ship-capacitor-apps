@@ -63,6 +63,10 @@ runs:
         sparse-checkout: |
           fastlane/Fastfile
           fastlane/Pluginfile
+    - run: ls -al
+    - run: ls fastlane/ -al
+    - run: tree -L 2
+
 
     - name: Decode Service Account
       uses: timheuer/base64-to-file@v1
