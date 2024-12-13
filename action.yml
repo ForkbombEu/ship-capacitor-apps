@@ -53,7 +53,7 @@ runs:
       id: keystore
       with:
         fileName: keystore.keystore
-        encodedString: ${{ secrets.keystore-file }}
+        encodedString: ::add-mask::${{ inputs.keystore-file }}
 
     - name: Checkout Fastfile and Dependencies
       uses: actions/checkout@v4
@@ -69,7 +69,7 @@ runs:
       id: service_account
       with:
         fileName: service-account.json
-        encodedString: ${{ secrets.service-account }}
+        encodedString: ${{ inputs.service-account }}
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
@@ -88,11 +88,11 @@ runs:
       env:
         KEYSTORE_PATH: ${{ steps.keystore.outputs.filePath }}
         SERVICE_ACCOUNT_PATH: ${{ steps.service_account.outputs.filePath }}
-        KEYSTORE_KEY_ALIAS: ${{ secrets.keystore-alias }}
-        KEYSTORE_KEY_PASSWORD: ${{ secrets.keystore-key-password }}
-        KEYSTORE_STORE_PASSWORD: ${{ secrets.keystore-password }}
+        KEYSTORE_KEY_ALIAS: ${{ inputs.keystore-alias }}
+        KEYSTORE_KEY_PASSWORD: ${{ inputs.keystore-key-password }}
+        KEYSTORE_STORE_PASSWORD: ${{ inputs.keystore-password }}
         PUBLIC_BACKEND_URL: ${{ inputs.backend-url }}
-        FIREBASE_APP_ID: ${{ secrets.firebase-app-id }}
+        FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
 
 
  - name: Checkout fastfile and dependencies
