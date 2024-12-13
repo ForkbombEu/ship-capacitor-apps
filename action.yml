@@ -9,12 +9,6 @@ inputs:
   lane:
     description: "The Fastlane lane to execute."
     required: true
-
-outputs:
-  result:
-    description: "The result of the deployment process."
-
-secrets:
   keystore-file:
     description: "Base64-encoded keystore file."
     required: true
@@ -33,6 +27,11 @@ secrets:
   firebase-app-id:
     description: "Firebase App ID (optional)."
     required: false
+
+outputs:
+  result:
+    description: "The result of the deployment process."
+
 
 runs:
   using: "composite"
