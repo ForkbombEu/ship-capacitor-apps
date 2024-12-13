@@ -88,5 +88,5 @@ runs:
         KEYSTORE_KEY_PASSWORD: ${{ inputs.keystore-key-password }}
         KEYSTORE_STORE_PASSWORD: ${{ inputs.keystore-password }}
         PUBLIC_BACKEND_URL: ${{ inputs.backend-url }}
-        FIREBASE_APP_ID: ${{ inputs.firebase-app-id }
+        FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
       
