@@ -77,10 +77,6 @@ runs:
         ruby-version: '3.0'
         bundler-cache: true
 
-    - name: Install Node Dependencies
-      run: pnpm install
-      working-directory: fastlane
-
     - name: Run Fastlane
       uses: maierj/fastlane-action@v3.1.0
       with:
@@ -92,15 +88,5 @@ runs:
         KEYSTORE_KEY_PASSWORD: ${{ inputs.keystore-key-password }}
         KEYSTORE_STORE_PASSWORD: ${{ inputs.keystore-password }}
         PUBLIC_BACKEND_URL: ${{ inputs.backend-url }}
-        FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
-
-
- - name: Checkout fastfile and dependencies
-      uses: actions/checkout@v4
-      with:
-        repository: ForkbombEu/fastlane
-        path: fastlane
-        sparse-checkout: |
-          fastlane/Fastfile
-          fastlane/Pluginfile
+        FIREBASE_APP_ID: ${{ inputs.firebase-app-id }
       
