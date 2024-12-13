@@ -59,11 +59,16 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: ForkbombEu/ship-capacitor-apps
+        path: fastlane_temp
         sparse-checkout: |
           fastlane/Fastfile
           fastlane/Pluginfile
-    - shell: bash
-      run: ls -al
+
+    - name: Move Fastlane files
+      shell: bash
+      run: |
+        mv fastlane_temp/fastlane/* fastlane/
+        rm -rf fastlane_temp
     - shell: bash
       run: ls fastlane/ -al
     - shell: bash
