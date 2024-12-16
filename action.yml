@@ -41,6 +41,10 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Set environment variable
+      run: echo "KEYSTORE_FILE=${{ inputs.keystore-file }}" >> $GITHUB_ENV
+      shell: bash
+
     - name: Setup Node and pnpm
       uses: dyne/pnpm@main
       with:
@@ -58,7 +62,7 @@ runs:
       id: keystore
       with:
         fileName: keystore.keystore
-        encodedString: "::add-mask::${{ inputs.keystore-file }}"
+        encodedString: ${{ env.KEYSTORE_FILE }}
 
     - name: Checkout Fastfile and Dependencies
       uses: actions/checkout@v4
