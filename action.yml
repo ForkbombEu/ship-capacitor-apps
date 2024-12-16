@@ -27,6 +27,11 @@ inputs:
   firebase-app-id:
     description: "Firebase App ID (optional)."
     required: false
+  pull-request-number: 
+    description: "Number of pull request"
+    required: false
+    
+
 
 outputs:
   result:
@@ -53,7 +58,7 @@ runs:
       id: keystore
       with:
         fileName: keystore.keystore
-        encodedString: ::add-mask::${{ inputs.keystore-file }}
+        encodedString: "::add-mask::${{ inputs.keystore-file }}"
 
     - name: Checkout Fastfile and Dependencies
       uses: actions/checkout@v4
@@ -80,7 +85,7 @@ runs:
       id: service_account
       with:
         fileName: service-account.json
-        encodedString: ${{ inputs.service-account }}
+        encodedString: "::add-mask::${{ inputs.service-account }}"
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
@@ -95,9 +100,10 @@ runs:
       env:
         KEYSTORE_PATH: ${{ steps.keystore.outputs.filePath }}
         SERVICE_ACCOUNT_PATH: ${{ steps.service_account.outputs.filePath }}
-        KEYSTORE_KEY_ALIAS: ${{ inputs.keystore-alias }}
-        KEYSTORE_KEY_PASSWORD: ${{ inputs.keystore-key-password }}
-        KEYSTORE_STORE_PASSWORD: ${{ inputs.keystore-password }}
+        KEYSTORE_KEY_ALIAS: "::add-mask::${{ inputs.keystore-alias }}"
+        KEYSTORE_KEY_PASSWORD: "::add-mask::${{ inputs.keystore-key-password }}"
+        KEYSTORE_STORE_PASSWORD: "::add-mask::${{ inputs.keystore-password }}"
         PUBLIC_BACKEND_URL: ${{ inputs.backend-url }}
-        FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
+        FIREBASE_APP_ID: "::add-mask::${{ inputs.firebase-app-id }}"
+        PULL_REQUEST_NUMBER: ${{ inputs.pull-request-number }}
       
