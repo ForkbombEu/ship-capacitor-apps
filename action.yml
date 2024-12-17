@@ -9,30 +9,28 @@ inputs:
   lane:
     description: "The Fastlane lane to execute."
     required: true
-  keystore-file:
-    description: "Base64-encoded keystore file."
-    required: true
-  service-account:
-    description: "Base64-encoded Google service account file."
-    required: true
-  keystore-alias:
-    description: "Key alias for the keystore."
-    required: true
-  keystore-key-password:
-    description: "Keystore key password."
-    required: true
-  keystore-password:
-    description: "Keystore password."
-    required: true
-  firebase-app-id:
-    description: "Firebase App ID (optional)."
-    required: false
   pull-request-number: 
     description: "Number of pull request"
     required: false
+  firebase-app-id:
+    description: "Firebase App ID (optional)."
+    required: false
+  # keystore-file:
+  #   description: "Base64-encoded keystore file."
+  #   required: true
+  # service-account:
+  #   description: "Base64-encoded Google service account file."
+  #   required: true
+  # keystore-alias:
+  #   description: "Key alias for the keystore."
+  #   required: true
+  # keystore-key-password:
+  #   description: "Keystore key password."
+  #   required: true
+  # keystore-password:
+  #   description: "Keystore password."
+  #   required: true
     
-
-
 outputs:
   result:
     description: "The result of the deployment process."
@@ -40,11 +38,7 @@ outputs:
 
 runs:
   using: "composite"
-  steps:
-    - name: Set environment variable
-      run: echo "KEYSTORE_FILE=${{ inputs.keystore-file }}" >> $GITHUB_ENV
-      shell: bash
-
+ 
     - name: Setup Node and pnpm
       uses: dyne/pnpm@main
       with:
@@ -62,7 +56,7 @@ runs:
       id: keystore
       with:
         fileName: keystore.keystore
-        encodedString: ${{ env.KEYSTORE_FILE }}
+        encodedString: ${{ secrets.keystore-file }}"
 
     - name: Checkout Fastfile and Dependencies
       uses: actions/checkout@v4
@@ -89,7 +83,7 @@ runs:
       id: service_account
       with:
         fileName: service-account.json
-        encodedString: "::add-mask::${{ inputs.service-account }}"
+        encodedString: ${{ secrets.service-account }}
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
@@ -104,10 +98,10 @@ runs:
       env:
         KEYSTORE_PATH: ${{ steps.keystore.outputs.filePath }}
         SERVICE_ACCOUNT_PATH: ${{ steps.service_account.outputs.filePath }}
-        KEYSTORE_KEY_ALIAS: "::add-mask::${{ inputs.keystore-alias }}"
-        KEYSTORE_KEY_PASSWORD: "::add-mask::${{ inputs.keystore-key-password }}"
-        KEYSTORE_STORE_PASSWORD: "::add-mask::${{ inputs.keystore-password }}"
+        KEYSTORE_KEY_ALIAS: ${{ secrets.keystore-alias }}
+        KEYSTORE_KEY_PASSWORD: ${{ secrets.keystore-key-password }}
+        KEYSTORE_STORE_PASSWORD: ${{ secrets.keystore-password }}
         PUBLIC_BACKEND_URL: ${{ inputs.backend-url }}
-        FIREBASE_APP_ID: "::add-mask::${{ inputs.firebase-app-id }}"
+        FIREBASE_APP_ID: ${{ secrets.firebase-app-id }}
         PULL_REQUEST_NUMBER: ${{ inputs.pull-request-number }}
       
