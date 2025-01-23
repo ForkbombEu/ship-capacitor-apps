@@ -86,11 +86,15 @@ jobs:
           sparse-checkout: |
             fastlane/Fastfile
             fastlane/Pluginfile
+            fastlane/Gemfile.lock
 
       - name: Move Fastlane files
         run: |
-          mv fastlane_temp/fastlane/* fastlane/
+          mv fastlane_temp/fastlane/Fastfile fastlane/
+          mv fastlane_temp/fastlane/Pluginfile fastlane/
+          mv fastlane_temp/fastlane/Gemfile.lock ./
           rm -rf fastlane_temp
+      
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
