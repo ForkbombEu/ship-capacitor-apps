@@ -15,6 +15,11 @@ on:
         description: "Fastlane lane to run (e.g., 'ios testflight' or 'ios production')"
         required: true
         type: string
+      initial-build-number:
+        description: "Ios initial build number. Default value is 2. If there are already on app store this value will be ignored"
+        required: false
+        default: "2"
+        type: string
       DEMO_USER:
         description: 'Demo user email'
         required: false
@@ -116,6 +121,7 @@ jobs:
           DEMO_PASSWORD: ${{ inputs.DEMO_PASSWORD }}
         with:
           lane: ${{ inputs.lane }}
+          initial-build-number: ${{ inputs.initial-build-number }}
 
       - name: Upload release bundle
         uses: actions/upload-artifact@v4
