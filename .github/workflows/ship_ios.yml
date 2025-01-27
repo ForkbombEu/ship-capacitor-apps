@@ -121,7 +121,7 @@ jobs:
           DEMO_PASSWORD: ${{ inputs.DEMO_PASSWORD }}
         with:
           lane: ${{ inputs.lane }}
-          initial-build-number: ${{ inputs.initial-build-number }}
+          INITIAL_BUILD_NUMBER: ${{ inputs.initial-build-number }}
 
       - name: Upload release bundle
         uses: actions/upload-artifact@v4
