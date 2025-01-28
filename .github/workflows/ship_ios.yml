@@ -20,6 +20,19 @@ on:
         required: false
         default: "2"
         type: string
+      CONTACT_EMAIL:
+        description: "Contact email address"
+        required: false
+        type: string
+      CONTACT_FIRST_NAME:
+        required: false
+        type: string
+      CONTACT_LAST_NAME:
+        required: false
+        type: string
+      CONTACT_PHONE:
+        required: false
+        type: string
       DEMO_USER:
         description: 'Demo user email'
         required: false
