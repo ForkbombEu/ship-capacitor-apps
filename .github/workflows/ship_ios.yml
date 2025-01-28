@@ -120,6 +120,11 @@ jobs:
           INITIAL_BUILD_NUMBER: ${{ inputs.initial-build-number }}
           DEMO_USER: ${{ inputs.DEMO_USER }}
           DEMO_PASSWORD: ${{ inputs.DEMO_PASSWORD }}
+          CONTACT_EMAIL: ${{ inputs.CONTACT_EMAIL }}
+          CONTACT_FIRST_NAME: ${{ inputs.CONTACT_FIRST_NAME }}
+          CONTACT_LAST_NAME: ${{ inputs.CONTACT_LAST_NAME }}
+          CONTACT_PHONE: ${{ inputs.CONTACT_PHONE }}
+
         with:
           lane: ${{ inputs.lane }}
       - name: Upload release bundle

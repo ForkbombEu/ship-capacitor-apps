@@ -29,6 +29,10 @@ PUBLIC_BACKEND_URL = ENV["PUBLIC_BACKEND_URL"]
 INITIAL_BUILD_NUMBER = ENV["INITIAL_BUILD_NUMBER"]
 DEMO_USER = ENV["DEMO_USER"]
 DEMO_PASSWORD = ENV["DEMO_PASSWORD"]
+CONTACT_EMAIL = ENV["CONTACT_EMAIL"]
+CONTACT_FIRST_NAME = ENV["CONTACT_FIRST_NAME"]
+CONTACT_LAST_NAME = ENV["CONTACT_LAST_NAME"]
+CONTACT_PHONE = ENV["CONTACT_PHONE"]
 
 platform :android do
   private_lane :build_and_sync do
@@ -320,13 +324,20 @@ end
    
     changelog = read_changelog
     upload_to_testflight(
+      beta_app_review_info: {
+      contact_email: CONTACT_EMAIL,
+      contact_first_name: CONTACT_FIRST_NAME,
+      contact_last_name: CONTACT_LAST_NAME,
+      contact_phone: CONTACT_PHONE,
+      demo_account_name: DEMO_USER,
+      demo_account_password: DEMO_PASSWORD
+    },
       api_key: api_key,
       ipa: "./App.ipa",
       skip_waiting_for_build_processing: true,
       demo_account_required: true,
       distribute_external:true,
-      changelog: changelog,
-      submit_beta_review: false
+      changelog: changelog
     )
   end
   private_lane :deliver_production do |options|
