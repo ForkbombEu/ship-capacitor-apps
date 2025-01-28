@@ -326,6 +326,7 @@ end
       demo_account_required: true,
       distribute_external:true,
       changelog: changelog
+      submit_beta_review: false
     )
   end
   private_lane :deliver_production do |options|
