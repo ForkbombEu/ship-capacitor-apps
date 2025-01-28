@@ -325,7 +325,7 @@ end
       skip_waiting_for_build_processing: true,
       demo_account_required: true,
       distribute_external:true,
-      changelog: changelog
+      changelog: changelog,
       submit_beta_review: false
     )
   end
