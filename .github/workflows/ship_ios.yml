@@ -117,12 +117,11 @@ jobs:
           APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
           APPLE_PROFILE_NAME: ${{ secrets.APPLE_PROFILE_NAME }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          INITIAL_BUILD_NUMBER: ${{ inputs.initial-build-number }}
           DEMO_USER: ${{ inputs.DEMO_USER }}
           DEMO_PASSWORD: ${{ inputs.DEMO_PASSWORD }}
         with:
           lane: ${{ inputs.lane }}
-          INITIAL_BUILD_NUMBER: ${{ inputs.initial-build-number }}
-
       - name: Upload release bundle
         uses: actions/upload-artifact@v4
         with:
