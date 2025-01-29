@@ -130,7 +130,7 @@ jobs:
           APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
           APPLE_PROFILE_NAME: ${{ secrets.APPLE_PROFILE_NAME }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-          INITIAL_BUILD_NUMBER: ${{ inputs.initial-build-number }}
+          INITIAL_BUILD_NUMBER: ${{ inputs.initial-build-number != '' && inputs.initial-build-number || '3' }} # This is to solve a known issue with default values in actions inputs
           DEMO_USER: ${{ inputs.DEMO_USER }}
           DEMO_PASSWORD: ${{ inputs.DEMO_PASSWORD }}
           CONTACT_EMAIL: ${{ inputs.CONTACT_EMAIL }}
