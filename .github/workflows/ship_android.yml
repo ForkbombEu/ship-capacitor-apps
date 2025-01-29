@@ -9,6 +9,9 @@ on:
       lane:
         required: true
         type: string
+      package-name:
+        required: true
+        type: string
     secrets:
       keystore-file:
         required: true
@@ -84,6 +87,6 @@ jobs:
           PULL_REQUEST_NUMBER: ${{ github.event.number }}
           PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
           FIREBASE_APP_ID: ${{ secrets.firebase-app-id }}
-
+          PACKAGE_NAME: ${{ inputs.package-name }}
         with:
           lane: ${{ inputs.lane }}
