@@ -33,6 +33,7 @@ CONTACT_EMAIL = ENV["CONTACT_EMAIL"]
 CONTACT_FIRST_NAME = ENV["CONTACT_FIRST_NAME"]
 CONTACT_LAST_NAME = ENV["CONTACT_LAST_NAME"]
 CONTACT_PHONE = ENV["CONTACT_PHONE"]
+PACKAGE_NAME = ENV["PACKAGE_NAME"]
 
 platform :android do
   private_lane :build_and_sync do
@@ -81,7 +82,7 @@ platform :android do
   private_lane :deliver_to_play_store do |options|
     upload_to_play_store(
       json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:"com.didroom.wallet",
+      package_name:PACKAGE_NAME,
       aab:"android/app/build/outputs/bundle/release/app-release.aab",
       track: options[:track],
       metadata_path: "./fastlane/metadata/android",
@@ -125,7 +126,7 @@ platform :android do
     internal_latest_version_code = google_play_track_version_codes(
       track: 'alpha', 
       json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:"com.didroom.wallet"
+      package_name:PACKAGE_NAME
     )
     # increment_version_code(
     #   gradle_file_path: "./android/app/build.gradle",
@@ -146,7 +147,7 @@ platform :android do
     internal_latest_version_code = google_play_track_version_codes(
       track: 'beta', 
       json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:"com.didroom.wallet"
+      package_name:PACKAGE_NAME
     )
     update_version(version_code: internal_latest_version_code.max + 1, version_name: package['version'] + "-beta")
     sign_and_build_bundle
@@ -159,7 +160,7 @@ platform :android do
     internal_latest_version_code = google_play_track_version_codes(
       track: 'production',
       json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:"com.didroom.wallet"
+      package_name:PACKAGE_NAME
     )
     update_version(version_code: internal_latest_version_code.max + 1, version_name: package['version'])
     sign_and_build_bundle
