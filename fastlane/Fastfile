@@ -69,10 +69,26 @@ platform :android do
   end
 
   def get_new_version_code
-    productionVersionCodes = google_play_track_version_codes(track: 'production')
-    betaVersionCodes = google_play_track_version_codes(track: 'beta')
-    alphaVersionCodes = google_play_track_version_codes(track: 'alpha')
-    internalVersionCodes = google_play_track_version_codes(track: 'internal')
+    productionVersionCodes = google_play_track_version_codes(
+      track: 'production',
+      json_key:"#{SERVICE_ACCOUNT_PATH}",
+      package_name:PACKAGE_NAME
+    )
+    betaVersionCodes = google_play_track_version_codes(
+      track: 'beta',
+      json_key:"#{SERVICE_ACCOUNT_PATH}",
+      package_name:PACKAGE_NAME
+    )
+    alphaVersionCodes = google_play_track_version_codes(
+      track: 'alpha',
+      json_key:"#{SERVICE_ACCOUNT_PATH}",
+      package_name:PACKAGE_NAME
+    )
+    internalVersionCodes = google_play_track_version_codes(
+      track: 'internal',
+      json_key:"#{SERVICE_ACCOUNT_PATH}",
+      package_name:PACKAGE_NAME
+    )
 
     versionCodes = [
       productionVersionCodes, 
