@@ -68,6 +68,22 @@ platform :android do
     )
   end
 
+  def get_new_version_code
+    productionVersionCodes = google_play_track_version_codes(track: 'production')
+    betaVersionCodes = google_play_track_version_codes(track: 'beta')
+    alphaVersionCodes = google_play_track_version_codes(track: 'alpha')
+    internalVersionCodes = google_play_track_version_codes(track: 'internal')
+
+    versionCodes = [
+      productionVersionCodes, 
+      betaVersionCodes, 
+      alphaVersionCodes, 
+      internalVersionCodes
+    ].reduce([], :concat)
+
+    return versionCodes.max + 1
+  end
+
   private_lane :update_version do |options|
     increment_version_code(
       gradle_file_path: "./android/app/build.gradle",
@@ -123,11 +139,7 @@ platform :android do
   lane :alpha do
     build_and_sync
     package = load_json(json_path: "./package.json")
-    internal_latest_version_code = google_play_track_version_codes(
-      track: 'alpha', 
-      json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:PACKAGE_NAME
-    )
+    version_code = get_new_version_code
     # increment_version_code(
     #   gradle_file_path: "./android/app/build.gradle",
     #   version_code: internal_latest_version_code.max + 1
@@ -136,7 +148,7 @@ platform :android do
     #   gradle_file_path: "./android/app/build.gradle",
     #   version_name: package['version'] + "-alpha"
     # )
-    update_version(version_code: internal_latest_version_code.max + 1, version_name: package['version'] + "-alpha")
+    update_version(version_code: version_code, version_name: package['version'] + "-alpha")
     sign_and_build_bundle
     release = deliver_to_play_store(track: 'alpha')
   end
@@ -144,12 +156,8 @@ platform :android do
   lane :beta do
     build_and_sync
     package = load_json(json_path: "./package.json")
-    internal_latest_version_code = google_play_track_version_codes(
-      track: 'beta', 
-      json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:PACKAGE_NAME
-    )
-    update_version(version_code: internal_latest_version_code.max + 1, version_name: package['version'] + "-beta")
+    version_code = get_new_version_code
+    update_version(version_code: version_code, version_name: package['version'] + "-beta")
     sign_and_build_bundle
     release = deliver_to_play_store(track: 'beta')
   end
@@ -157,12 +165,8 @@ platform :android do
   lane :production do
     build_and_sync
     package = load_json(json_path: "./package.json")
-    internal_latest_version_code = google_play_track_version_codes(
-      track: 'production',
-      json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:PACKAGE_NAME
-    )
-    update_version(version_code: internal_latest_version_code.max + 1, version_name: package['version'])
+    version_code = get_new_version_code
+    update_version(version_code: version_code, version_name: package['version'])
     sign_and_build_bundle
     release = deliver_to_play_store(track: 'production')
   end
