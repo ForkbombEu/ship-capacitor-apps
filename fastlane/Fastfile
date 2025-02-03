@@ -35,7 +35,7 @@ CONTACT_LAST_NAME = ENV["CONTACT_LAST_NAME"]
 CONTACT_PHONE = ENV["CONTACT_PHONE"]
 PACKAGE_NAME = ENV["PACKAGE_NAME"]
 
-def generate_release_notes(previous_version)
+def generate_release_notes(previous_version) 
   changelog = File.read(File.expand_path('../CHANGELOG.md', __dir__))
   sections = []
   current_section = []
@@ -274,7 +274,7 @@ platform :ios do
     end
   end
 
-  private lane :get_live_version do
+  private_lane :get_live_version do
     api_key = app_store_connect_api_key(
       key_id: ENV['APPLE_KEY_ID'],
       issuer_id: ENV['APPLE_ISSUER_ID'],
