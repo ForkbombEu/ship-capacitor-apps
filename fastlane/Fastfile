@@ -35,6 +35,57 @@ CONTACT_LAST_NAME = ENV["CONTACT_LAST_NAME"]
 CONTACT_PHONE = ENV["CONTACT_PHONE"]
 PACKAGE_NAME = ENV["PACKAGE_NAME"]
 
+def generate_release_notes(previous_version)
+  changelog = File.read(File.expand_path('../CHANGELOG.md', __dir__))
+  sections = []
+  current_section = []
+  changelog.each_line do |line|
+    if line.start_with?('# [')
+      sections << current_section.join unless current_section.empty?
+      current_section = [line]
+    else
+      current_section << line unless current_section.empty?
+    end
+  end
+  sections << current_section.join unless current_section.empty?
+
+  changes = []
+
+  sections.each do |section|
+    version_match = section.match(/^# \[(\d+\.\d+\.\d+)\]/)
+    next unless version_match
+
+    current_version = version_match[1]
+
+    current_parts = current_version.split('.').map(&:to_i)
+    prev_parts = previous_version.split('.').map(&:to_i)
+
+    is_newer = false
+    current_parts.each_with_index do |part, index|
+      prev_part = prev_parts[index] || 0
+      if part > prev_part
+        is_newer = true
+        break
+      elsif part < prev_part
+        is_newer = false
+        break
+      end
+    end
+
+    unless is_newer
+      break
+    end
+
+    section.each_line do |line|
+      next unless line.start_with?('* ')
+      clean_line = line.gsub(/ \(\[[^\]]+\]\([^)]+\)\)/, '').strip
+      changes << "- #{clean_line}"
+    end
+  end
+
+  changes.join("\n")
+end
+
 platform :android do
   private_lane :build_and_sync do
     sh "pnpm install -g @ionic/cli"
@@ -200,8 +251,10 @@ platform :ios do
     begin
       setup_signing(keychain_info)
       build_num, new_version = bump_build_number_and_version
+      last_version = get_live_version
+      release_notes = generate_release_notes(last_version)
       build_app_with_signing(keychain_info)
-      deliver_production(build_number: build_num, new_version: new_version)
+      deliver_production(build_number: build_num, new_version: new_version, release_notes: release_notes)
     ensure
       cleanup_keychain(keychain_info)
     end
@@ -212,10 +265,35 @@ platform :ios do
     begin
       setup_signing(keychain_info)
       bump_build_number_and_version
+      last_version = get_live_version
+      release_notes = generate_release_notes(last_version)
       build_app_with_signing(keychain_info)
-      submit_to_testflight
+      submit_to_testflight(release_notes: release_notes)
     ensure
       cleanup_keychain(keychain_info)
+    end
+  end
+
+  private lane :get_live_version do
+    api_key = app_store_connect_api_key(
+      key_id: ENV['APPLE_KEY_ID'],
+      issuer_id: ENV['APPLE_ISSUER_ID'],
+      key_content: Base64.decode64(ENV['APPLE_KEY_CONTENT']),
+      duration: 1200,
+      in_house: false
+    )
+    Spaceship::ConnectAPI.auth = api_key
+
+    app = Spaceship::ConnectAPI::App.find(PACKAGE_NAME)
+
+    live_version = app.get_live_app_store_version
+
+    if live_version
+      version = live_version.version_string
+      UI.success("Live Version: #{version}")
+      return version
+    else
+      UI.message("No live version found for this app.")
     end
   end
 
@@ -334,7 +412,7 @@ end
     )
   end
 
-  private_lane :submit_to_testflight do
+  private_lane :submit_to_testflight do |options|
     api_key = app_store_connect_api_key(
       key_id: ENV['APPLE_KEY_ID'],
       issuer_id: ENV['APPLE_ISSUER_ID'],
@@ -342,8 +420,7 @@ end
       duration: 1200,
       in_house: false
     )
-   
-    changelog = read_changelog
+
     upload_to_testflight(
       beta_app_review_info: {
       contact_email: CONTACT_EMAIL,
@@ -358,7 +435,7 @@ end
       skip_waiting_for_build_processing: true,
       demo_account_required: true,
       distribute_external:true,
-      changelog: changelog
+      changelog: options[:release_notes]
     )
   end
   private_lane :deliver_production do |options|
@@ -369,15 +446,13 @@ end
       duration: 1200,
       in_house: false
     )
-    sh "sed -i '' '1s/.*/## [Unreleased]/' changelog.md"
-    changelog = read_changelog
     pilot(
       api_key: api_key,
       ipa: "./App.ipa",
       skip_waiting_for_build_processing: true,
       demo_account_required: true,
       distribute_external:true,
-      changelog: changelog,
+      changelog: options[:release_notes],
       app_version: options["new_version"]
     )
     deliver(
