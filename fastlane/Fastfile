@@ -123,22 +123,22 @@ platform :android do
     productionVersionCodes = google_play_track_version_codes(
       track: 'production',
       json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:PACKAGE_NAME
+      package_name:BUNDLE_IDENTIFIER
     )
     betaVersionCodes = google_play_track_version_codes(
       track: 'beta',
       json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:PACKAGE_NAME
+      package_name:BUNDLE_IDENTIFIER
     )
     alphaVersionCodes = google_play_track_version_codes(
       track: 'alpha',
       json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:PACKAGE_NAME
+      package_name:BUNDLE_IDENTIFIER
     )
     internalVersionCodes = google_play_track_version_codes(
       track: 'internal',
       json_key:"#{SERVICE_ACCOUNT_PATH}",
-      package_name:PACKAGE_NAME
+      package_name:BUNDLE_IDENTIFIER
     )
 
     versionCodes = [
