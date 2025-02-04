@@ -54,7 +54,7 @@ Every Android application must be digitally signed before installation on a devi
   - Not acceptable when publishing your app
 - **Release Key:**
   - Manually generated (using tools like Keytool).
-- Used to sign the final version of your app for distribution.
+  - Used to sign the final version of your app for distribution.
   - Must be kept secure and use consistently across updates.
 
 ---
@@ -128,8 +128,7 @@ Development Mode: Every time you run or debug your project, Android Studio autom
           release {
               storeFile file("my-release-key.jks")
               storePassword System.getenv("KEYSTORE_PASSWORD")
-```
-keyAlias "my_key_alias"
+              keyAlias "my_key_alias"
               keyPassword System.getenv("KEY_PASSWORD")
           }
       }
@@ -167,9 +166,9 @@ Signing of Android apps is fundamental because it allows the system to verify th
 Further Reading and References
 
 - [Sign your app | Android Studio](https://developer.android.com/studio/publish/app-signing)
-[Android App Signing — A Refresher](https://medium.com/mobile-app-development-publication/android-app-signing-a-refresher-9cb8f664cfcf)
- [Step-by-step guide to Android code signing](https://blog.codemagic.io/the-simple-guide-to-android-code-signing/)
- [APK Signing Schemes](https://source.android.com/docs/security/features/apksigning)
+- [Android App Signing — A Refresher](https://medium.com/mobile-app-development-publication/android-app-signing-a-refresher-9cb8f664cfcf)
+- [Step-by-step guide to Android code signing](https://blog.codemagic.io/the-simple-guide-to-android-code-signing/)
+ - [APK Signing Schemes](https://source.android.com/docs/security/features/apksigning)
 
 ---
 Happy coding and building!
