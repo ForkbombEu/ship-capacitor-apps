@@ -95,3 +95,8 @@ jobs:
           PACKAGE_NAME: ${{ inputs.package-name }}
         with:
           lane: ${{ inputs.lane }}
+      - name: upload binary artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            release.apk
