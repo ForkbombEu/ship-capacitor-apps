@@ -371,6 +371,7 @@ end
       password: options[:keychain_password],
       set_default: false
     )
+    xcode_install(version: "16.3")
     xcode_select("/Applications/Xcode-16.3.app")
     build_app(
       workspace: "./ios/App/App.xcworkspace",
