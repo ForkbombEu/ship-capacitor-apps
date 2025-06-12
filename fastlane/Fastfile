@@ -385,7 +385,7 @@ end
       xcargs: "-verbose",
       buildlog_path: "./build_logs",
       export_xcargs: "-allowProvisioningUpdates",
-      sdk: "iOS 17.5"
+      sdk: "iOS 18.2"
     )
   end
 
