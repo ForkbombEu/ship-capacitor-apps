@@ -371,8 +371,6 @@ end
       password: options[:keychain_password],
       set_default: false
     )
-    xcodes(version: "16.3")
-    xcode_select("/Applications/Xcode-16.3.app")
     build_app(
       workspace: "./ios/App/App.xcworkspace",
       scheme: "App",
@@ -387,7 +385,7 @@ end
       xcargs: "-verbose",
       buildlog_path: "./build_logs",
       export_xcargs: "-allowProvisioningUpdates",
-      sdk: "iOS 18.4"
+      sdk: "iOS 18"
     )
   end
 
