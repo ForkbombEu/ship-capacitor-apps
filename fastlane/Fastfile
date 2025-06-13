@@ -384,8 +384,8 @@ end
       },
       xcargs: "-verbose",
       buildlog_path: "./build_logs",
-      export_xcargs: "-allowProvisioningUpdates",
-      sdk: "iOS 18"
+      export_xcargs: "-allowProvisioningUpdates"
+      # sdk: "iOS 18"
     )
   end
 
