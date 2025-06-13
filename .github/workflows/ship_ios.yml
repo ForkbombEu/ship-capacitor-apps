@@ -67,8 +67,13 @@ jobs:
     steps:
       - name: xcode 16.4
         uses: maxim-lobanov/setup-xcode@v1
+        id: setup_xcode
         with:
           xcode-version: '16.4'
+      - name: Verify xcode-select path
+        run: xcode-select -p
+      - name: Verify Xcode version
+        run: xcodebuild -version
       - name: Check out the code
         uses: actions/checkout@v4
         with:
@@ -127,6 +132,7 @@ jobs:
       - name: Run Fastlane lane
         uses: maierj/fastlane-action@v3.1.0
         env:
+          DEVELOPER_DIR: ${{ steps.setup_xcode.outputs.xcode-path }}
           APP_STORE_CONNECT_TEAM_ID: ${{ secrets.APP_STORE_CONNECT_TEAM_ID }}
           BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
