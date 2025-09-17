@@ -65,11 +65,11 @@ jobs:
   build_ios:
     runs-on: macOS-latest
     steps:
-      - name: xcode 16.2
+      - name: xcode 16.3.0
         uses: maxim-lobanov/setup-xcode@v1
         id: setup_xcode
         with:
-          xcode-version: '16.2.0'
+          xcode-version: '16.3.0'
       - name: Verify xcode-select path
         run: xcode-select -p
       - name: Verify Xcode version
