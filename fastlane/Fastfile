@@ -298,17 +298,17 @@ platform :ios do
     
     begin
       app_info = Spaceship::ConnectAPI::App.find(ENV['BUNDLE_IDENTIFIER'])
-      UI.message("App found: #{app_info.name}")
       live_version = app_info.get_live_app_store_version
       UI.message("Live version on App Store: #{live_version.version_string}") if live_version
       
       if live_version && live_version.version_string == version
-        return true
+        true
+      else
+        false
       end
-      return false
     rescue => e
       UI.error("Error checking app version status: #{e}")
-      return false
+      false
     end
   end
 
