@@ -286,6 +286,29 @@ platform :ios do
     update_project_settings
   end
 
+  private_lane :version_already_in_production? do |version|
+    api_key = app_store_connect_api_key(
+      key_id: ENV['APPLE_KEY_ID'],
+      issuer_id: ENV['APPLE_ISSUER_ID'],
+      key_content: Base64.decode64(ENV['APPLE_KEY_CONTENT']),
+      duration: 1200,
+      in_house: false
+    )
+    
+    begin
+      app_info = Spaceship::ConnectAPI::App.find(ENV['BUNDLE_IDENTIFIER'])
+      live_version = app_info.get_live_app_store_version
+      
+      if live_version && live_version.version_string == version
+        return true
+      end
+      return false
+    rescue => e
+      UI.error("Error checking app version status: #{e}")
+      return false
+    end
+  end
+
 lane :bump_build_number_and_version do
   api_key = app_store_connect_api_key(
     key_id: ENV['APPLE_KEY_ID'],
@@ -310,7 +333,14 @@ lane :bump_build_number_and_version do
   )
   package = load_json(json_path: "./package.json")
   new_version = package["version"]
-  UI.message("Updating app version to #{new_version}")
+  if version_already_in_production?(new_version)
+    version_parts = new_version.split('.').map(&:to_i)
+    version_parts[-1] += 1
+    new_version = version_parts.join('.')
+    UI.message("Version #{package['version']} already in production, bumping to #{new_version}")
+  else
+    UI.message("Updating app version to #{new_version}")
+  end
   info_plist_path = "./ios/App/App/Info.plist"
   set_info_plist_value(
     path: info_plist_path,
