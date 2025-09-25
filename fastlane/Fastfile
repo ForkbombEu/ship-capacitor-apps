@@ -286,7 +286,8 @@ platform :ios do
     update_project_settings
   end
 
-  private_lane :version_already_in_production? do |version|
+  private_lane :version_already_in_production? do |options|
+    version = options[:version]
     api_key = app_store_connect_api_key(
       key_id: ENV['APPLE_KEY_ID'],
       issuer_id: ENV['APPLE_ISSUER_ID'],
@@ -333,7 +334,7 @@ lane :bump_build_number_and_version do
   )
   package = load_json(json_path: "./package.json")
   new_version = package["version"]
-  if version_already_in_production?(new_version)
+  if version_already_in_production?(version: new_version)
     version_parts = new_version.split('.').map(&:to_i)
     version_parts[-1] += 1
     new_version = version_parts.join('.')
