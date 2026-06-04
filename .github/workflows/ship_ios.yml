@@ -87,7 +87,7 @@ jobs:
       - name: Install dependencies
         uses: dyne/pnpm@main
         with:
-          node-version: '20.11.1'
+          node-version: '22'
 
       - name: Install project dependencies
         run: pnpm install
