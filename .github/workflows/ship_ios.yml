@@ -63,13 +63,13 @@ on:
 
 jobs:
   build_ios:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
-      - name: Select Xcode 15.4
+      - name: Select latest Xcode
         uses: maxim-lobanov/setup-xcode@v1
         id: setup_xcode
         with:
-          xcode-version: '15.4'
+          xcode-version: latest-stable
       - name: Verify xcode-select path
         run: xcode-select -p
       - name: Verify Xcode version
