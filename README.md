@@ -102,6 +102,7 @@ To use the workflows, reference them in your project’s GitHub Actions configur
 The workflows require specific input variables (`with:`) for customization:
 - **`backend-url`**: The backend URL used in your application.
 - **`lane`**: The Fastlane lane to execute (e.g., `production`, `alpha`, `testflight`).
+- **`pnpm-version`** (optional): The pnpm version to install. Defaults to `9`. Set it to match your project, e.g. `'11'`.
 - Any additional required environment-specific variables (e.g., `DEMO_USER`, `DEMO_PASSWORD`).
 
 ### 🙊 Secrets

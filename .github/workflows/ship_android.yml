@@ -12,6 +12,11 @@ on:
       package-name:
         required: false
         type: string
+      pnpm-version:
+        description: "pnpm version to install. Defaults to 9, same as dyne/pnpm"
+        required: false
+        default: '9'
+        type: string
     secrets:
       keystore-file:
         required: true
@@ -34,6 +39,7 @@ jobs:
         with:
           submodules: true
           node-version: '22'
+          pnpm-version: ${{ inputs.pnpm-version }}
       - uses: actions/cache@v4
         with:
           path: |

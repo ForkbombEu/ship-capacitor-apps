@@ -20,6 +20,11 @@ on:
         required: false
         default: "2"
         type: string
+      pnpm-version:
+        description: "pnpm version to install. Defaults to 9, same as dyne/pnpm"
+        required: false
+        default: '9'
+        type: string
       CONTACT_EMAIL:
         description: "Contact email address"
         required: false
@@ -88,6 +93,7 @@ jobs:
         uses: dyne/pnpm@main
         with:
           node-version: '22'
+          pnpm-version: ${{ inputs.pnpm-version }}
 
       - name: Install project dependencies
         run: pnpm install
