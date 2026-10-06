@@ -40,6 +40,10 @@ jobs:
           submodules: true
           node-version: '22'
           pnpm-version: ${{ inputs.pnpm-version }}
+      # pnpm 11 installs global binaries to $PNPM_HOME/bin, which pnpm/action-setup
+      # doesn't put on PATH; the Fastfile runs `pnpm install -g @ionic/cli`.
+      - name: Add pnpm global bin to PATH
+        run: echo "$PNPM_HOME/bin" >> "$GITHUB_PATH"
       - uses: actions/cache@v4
         with:
           path: |
